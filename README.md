@@ -1,12 +1,25 @@
 # ccline
 
-A richer status line for [Claude Code](https://claude.ai/code) — model, project path, rate-limit burn-down, and a live context-window budget bar, in one line.
+> A richer status line for [Claude Code](https://claude.ai/code) — model, project path, rate-limit burn-down, and a live context-window budget bar, all in one line.
+
+[![CI](https://github.com/Alyssum-Information/ccline/actions/workflows/ci.yml/badge.svg)](https://github.com/Alyssum-Information/ccline/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Node](https://img.shields.io/badge/node-%E2%89%A514-brightgreen.svg)](https://nodejs.org)
+[![Dependencies: none](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](package.json)
 
 ![ccline status line](screenshots/demo.png)
 
-Segments run nearest-term to farthest: this conversation → 5-hour window → 7-day window.
+Segments run nearest-term to farthest: **this conversation → 5-hour window → 7-day window.**
 
-Pure Node.js, no dependencies, single file. The four core segments render out of the box; two optional add-ons (caveman / rtk token savings) light up only if you have those tools.
+## Features
+
+- **Zero dependencies, single file.** Just Node.js and `statusline.js`.
+- **Context budget at a glance** — tokens used vs. the window limit, with a color-tiered bar and percentage.
+- **Rate-limit burn-down** — time until the 5-hour window resets, plus 5-hour and 7-day usage.
+- **Color-tiered** — every bar goes green → yellow → red as it fills (60% / 85% thresholds).
+- **Fully themeable** — colors, bar widths, and path length via a small JSON config; no rebuild.
+- **Optional add-ons** — [caveman](https://github.com/juliusbrussee/caveman) and `rtk` token-savings segments light up only if you have those tools, and cost nothing if you don't.
+- **Fast** — per-session caches keep each render cheap; heavy work is memoized.
 
 ## What each segment means
 
@@ -20,13 +33,16 @@ Pure Node.js, no dependencies, single file. The four core segments render out of
 | ⛏ caveman *(opt)* | `⛏12k` | Tokens saved this session by the [caveman](https://github.com/juliusbrussee/caveman) plugin (pink) |
 | ↓ rtk *(opt)* | `↓8k` | Tokens saved this session by the `rtk` CLI (cyan) |
 
-Bars go green → yellow → red as usage climbs (60% / 85% thresholds). All token figures are for **this conversation / this session** — no lifetime totals.
+All token figures are for **this conversation / this session** — no lifetime totals. The ⛏ and ↓ segments extend the context bar *beyond* the real limit, visualizing how much longer the bar would be without those savings.
 
-The ⛏ and ↓ segments extend the context bar *beyond* the real limit, visualizing how much longer the bar would be without those savings.
+## Requirements
+
+- [Node.js](https://nodejs.org) **≥ 14** on your `PATH`.
+- A terminal with **256-color** support and a font that renders emoji + geometric glyphs (◆ ⏳ 📅 ⬢ ⛏ ↓ and the `▓ ░` block characters). Most modern terminals and Nerd Fonts qualify.
 
 ## Install
 
-Requires [Node.js](https://nodejs.org) on your `PATH`. Clone, then run the installer for your OS — it copies the script into your Claude config dir and wires up `settings.json` (existing keys preserved):
+Clone, then run the installer for your OS — it copies the script into your Claude config dir and merges the `statusLine` block into `settings.json` (existing keys preserved):
 
 ```bash
 git clone https://github.com/Alyssum-Information/ccline.git
@@ -74,7 +90,7 @@ Everything works with zero config. To customize, drop a JSON file at `~/.claude/
 | `contextBarWidth` | `12` | Width of the ⬢ context bar |
 | `rateBarWidth` | `5` | Width of the ⏳ 5-hour bar |
 | `pathMaxLen` | `48` | Truncate the project path past this many chars |
-| `colors` | *(see below)* | 256-color xterm indices per element |
+| `colors` | *(256-color xterm indices)* | Per-element color (`accent`, `text`, `dim`, `faint`, `green`, `yellow`, `red`, `caveman`, `rtk`) |
 | `segments.caveman` | `"auto"` | `auto` / `on` / `off` for the ⛏ segment |
 | `segments.rtk` | `"auto"` | `auto` / `on` / `off` for the ↓ segment |
 
@@ -89,8 +105,32 @@ If you don't have these tools, leave the defaults — the segments simply never 
 
 ## How it works
 
-Claude Code pipes a JSON blob to the status-line command on stdin (model, workspace, `context_window`, `rate_limits`, `transcript_path`, …). `statusline.js` reads it, formats the segments with ANSI 256-color codes, and writes one line to stdout. Small per-session cache files in the temp dir keep it fast (transcript parse is memoized by file size; `rtk gain` is snapshotted per session).
+Claude Code pipes a JSON blob to the status-line command on stdin (model, workspace, `context_window`, `rate_limits`, `transcript_path`, …). `statusline.js` reads it, formats the segments with ANSI 256-color codes, and writes one line to stdout. Small per-session cache files in the temp dir keep it fast (the transcript parse is memoized by file size; `rtk gain` is snapshotted per session).
+
+Regenerate the screenshot above any time with:
+
+```bash
+node tools/demo.js
+```
+
+## Troubleshooting
+
+| Symptom | Fix |
+|---|---|
+| Glyphs show as boxes (□ / tofu) | Use a font with emoji + symbol coverage (e.g. a [Nerd Font](https://www.nerdfonts.com/)). |
+| No colors, just text | Your terminal isn't in 256-color mode. Enable it or set `TERM=xterm-256color`. |
+| Status line is blank | Confirm `node` is on `PATH`, and that the `command` in `settings.json` points at the installed script. |
+| Nothing after a fresh start | The rate-limit numbers appear after the first API response; ccline shows the last-seen values (dimmed) until then. |
+| `rtk` segment adds lag | You don't have `rtk` — set `"segments": { "rtk": "off" }` in your config so it's never invoked. |
+
+## Uninstall
+
+Remove the `statusLine` block from `~/.claude/settings.json`, then delete the installed script (`~/.claude/ccline.js`) and, if present, `~/.claude/ccline.config.json`.
+
+## Contributing
+
+Issues and pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md). Keep it dependency-free and single-file.
 
 ## License
 
-MIT © 2026 Alyssum
+[MIT](LICENSE) © 2026 Alyssum

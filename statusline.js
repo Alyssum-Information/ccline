@@ -79,6 +79,22 @@ function loadConfig() {
 const CONFIG = loadConfig();
 const COL = CONFIG.colors;
 
+// Answer --version / --help before touching stdin (reading fd 0 would block).
+const VERSION = '1.0.0';
+if (process.argv.includes('-v') || process.argv.includes('--version')) {
+  process.stdout.write(`ccline ${VERSION}\n`);
+  process.exit(0);
+}
+if (process.argv.includes('-h') || process.argv.includes('--help')) {
+  process.stdout.write(
+    `ccline ${VERSION} — a richer status line for Claude Code\n\n` +
+    `Claude Code pipes status-line JSON on stdin; ccline prints one formatted line.\n` +
+    `Configure via ~/.claude/ccline.config.json (or $CCLINE_CONFIG).\n` +
+    `Docs: https://github.com/Alyssum-Information/ccline\n`
+  );
+  process.exit(0);
+}
+
 let data = {};
 try { data = JSON.parse(fs.readFileSync(0, 'utf8').replace(/^﻿/, '')); } catch {}
 

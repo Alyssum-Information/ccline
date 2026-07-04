@@ -1,0 +1,42 @@
+{
+  "name": "ccline",
+  "version": "1.0.0",
+  "description": "A richer status line for Claude Code — model, project path, rate-limit burn-down, and a live context-window budget bar.",
+  "keywords": [
+    "claude",
+    "claude-code",
+    "statusline",
+    "status-line",
+    "anthropic",
+    "cli",
+    "terminal"
+  ],
+  "homepage": "https://github.com/Alyssum-Information/ccline#readme",
+  "bugs": {
+    "url": "https://github.com/Alyssum-Information/ccline/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alyssum-Information/ccline.git"
+  },
+  "license": "MIT",
+  "author": "Alyssum",
+  "type": "commonjs",
+  "main": "statusline.js",
+  "bin": {
+    "ccline": "statusline.js"
+  },
+  "files": [
+    "statusline.js",
+    "examples/",
+    "install.sh",
+    "install.ps1"
+  ],
+  "engines": {
+    "node": ">=14"
+  },
+  "scripts": {
+    "test": "node --check statusline.js",
+    "demo": "node tools/demo.js"
+  }
+}

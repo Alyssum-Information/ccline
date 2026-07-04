@@ -8,15 +8,22 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['14', '18', '20', '22']
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ matrix.node-version }}
       - name: Syntax check
         run: node --check statusline.js
+      - name: Version flag
+        run: node statusline.js --version
       - name: Smoke test (renders without crashing)
         run: |
           echo '{"model":{"display_name":"Opus 4.8"},"workspace":{"current_dir":"/tmp/proj","project_dir":"/tmp/proj"},"context_window":{"total_input_tokens":84000,"context_window_size":200000}}' \
             | node statusline.js
           echo
+      - name: Demo generator
+        run: node tools/demo.js

@@ -16,6 +16,5 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Config overrides via `~/.claude/ccline.config.json` or `$CCLINE_CONFIG`
   (colors, bar widths, path length, per-segment toggles).
 - Cross-platform installers: `install.sh` and `install.ps1`.
-- Screenshot/demo generator: `tools/demo.js`.
 
 [1.0.0]: https://github.com/Alyssum-Information/ccline/releases/tag/v1.0.0

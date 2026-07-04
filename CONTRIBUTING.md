@@ -16,12 +16,7 @@ dependency-free Node.js file — and the goal is to keep it that way.
 
 ```bash
 node --check statusline.js   # syntax lint (this is `npm test`)
-node tools/demo.js           # render with sample data (dark terminal recommended)
 ```
-
-`tools/demo.js` feeds curated payloads through the real script, including a
-sample that exercises the optional ⛏/↓ add-on segments via throwaway fixtures —
-so a visual check covers every code path without touching your live setup.
 
 ## Pull requests
 

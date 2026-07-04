@@ -107,12 +107,6 @@ If you don't have these tools, leave the defaults — the segments simply never 
 
 Claude Code pipes a JSON blob to the status-line command on stdin (model, workspace, `context_window`, `rate_limits`, `transcript_path`, …). `statusline.js` reads it, formats the segments with ANSI 256-color codes, and writes one line to stdout. Small per-session cache files in the temp dir keep it fast (the transcript parse is memoized by file size; `rtk gain` is snapshotted per session).
 
-Regenerate the screenshot above any time with:
-
-```bash
-node tools/demo.js
-```
-
 ## Troubleshooting
 
 | Symptom | Fix |

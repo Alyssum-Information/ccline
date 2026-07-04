@@ -25,5 +25,3 @@ jobs:
           echo '{"model":{"display_name":"Opus 4.8"},"workspace":{"current_dir":"/tmp/proj","project_dir":"/tmp/proj"},"context_window":{"total_input_tokens":84000,"context_window_size":200000}}' \
             | node statusline.js
           echo
-      - name: Demo generator
-        run: node tools/demo.js

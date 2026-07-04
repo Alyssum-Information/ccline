@@ -36,7 +36,6 @@
     "node": ">=14"
   },
   "scripts": {
-    "test": "node --check statusline.js",
-    "demo": "node tools/demo.js"
+    "test": "node --check statusline.js"
   }
 }

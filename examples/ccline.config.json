@@ -1,0 +1,24 @@
+{
+  "_comment": "Copy to ~/.claude/ccline.config.json (or point $CCLINE_CONFIG at it). Every key is optional; you only need the ones you want to change. Delete this _comment line.",
+
+  "contextBarWidth": 12,
+  "rateBarWidth": 5,
+  "pathMaxLen": 48,
+
+  "colors": {
+    "accent": 141,
+    "text": 252,
+    "dim": 245,
+    "faint": 238,
+    "green": 114,
+    "yellow": 214,
+    "red": 196,
+    "caveman": 205,
+    "rtk": 45
+  },
+
+  "segments": {
+    "caveman": "auto",
+    "rtk": "off"
+  }
+}

@@ -1,0 +1,22 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Syntax check
+        run: node --check statusline.js
+      - name: Smoke test (renders without crashing)
+        run: |
+          echo '{"model":{"display_name":"Opus 4.8"},"workspace":{"current_dir":"/tmp/proj","project_dir":"/tmp/proj"},"context_window":{"total_input_tokens":84000,"context_window_size":200000}}' \
+            | node statusline.js
+          echo
